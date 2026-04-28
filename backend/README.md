@@ -34,6 +34,12 @@ Recommended start command on Render:
 uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers
 ```
 
+Pin Python version to `3.12` on Render. This repository includes `backend/.python-version` for that purpose. You can also set:
+
+```env
+PYTHON_VERSION=3.12.10
+```
+
 For a frontend hosted on GitHub Pages, use production cookie settings:
 
 ```env
