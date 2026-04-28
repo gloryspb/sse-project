@@ -25,3 +25,20 @@ uvicorn app.main:app --reload
 ```
 
 Swagger UI will be available at [http://localhost:8000/docs](http://localhost:8000/docs).
+
+## Render Settings
+
+Recommended start command on Render:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers
+```
+
+For a frontend hosted on GitHub Pages, use production cookie settings:
+
+```env
+CORS_ORIGINS=https://gloryspb.github.io
+COOKIE_SECURE=true
+COOKIE_SAMESITE=none
+COOKIE_DOMAIN=
+```

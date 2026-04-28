@@ -38,6 +38,14 @@ VITE_API_URL=https://your-backend.onrender.com
 
 The workflow at `.github/workflows/deploy-frontend.yml` will build `frontend/` and publish it to GitHub Pages.
 
+If the backend is hosted on Render, set backend CORS and cookie envs like:
+
+```env
+CORS_ORIGINS=https://gloryspb.github.io
+COOKIE_SECURE=true
+COOKIE_SAMESITE=none
+```
+
 ## Backend
 
 1. Create PostgreSQL database, for example `web_toolbox`.
@@ -70,6 +78,9 @@ DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/web_toolbox
 SECRET_KEY=change-me-to-a-long-random-secret
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 CORS_ORIGINS=http://localhost:5173
+COOKIE_SECURE=false
+COOKIE_SAMESITE=lax
+COOKIE_DOMAIN=
 ```
 
 ## API Endpoints
