@@ -34,7 +34,11 @@ async def register(
 ) -> AuthResponse:
     user, token = await register_user(session, payload)
     _set_auth_cookie(response, token)
-    return AuthResponse(message="Registration successful", user=UserRead.model_validate(user))
+    return AuthResponse(
+        message="Registration successful",
+        user=UserRead.model_validate(user),
+        access_token=token,
+    )
 
 
 @router.post("/login", response_model=AuthResponse)
@@ -45,7 +49,11 @@ async def login(
 ) -> AuthResponse:
     user, token = await authenticate_user(session, payload)
     _set_auth_cookie(response, token)
-    return AuthResponse(message="Login successful", user=UserRead.model_validate(user))
+    return AuthResponse(
+        message="Login successful",
+        user=UserRead.model_validate(user),
+        access_token=token,
+    )
 
 
 @router.get("/me", response_model=UserRead)

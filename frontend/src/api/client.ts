@@ -1,4 +1,5 @@
 import type { ApiErrorPayload } from '@/types/api';
+import { tokenStorage } from '@/utils/token';
 
 const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '') ?? 'http://localhost:8000';
 
@@ -17,10 +18,12 @@ interface RequestOptions extends RequestInit {
 }
 
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  const token = tokenStorage.get();
   const response = await fetch(`${API_URL}${path}`, {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers ?? {}),
     },
     ...options,

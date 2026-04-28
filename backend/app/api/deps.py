@@ -1,4 +1,6 @@
-from fastapi import Cookie, Depends, HTTPException, status
+from typing import Annotated
+
+from fastapi import Cookie, Depends, Header, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.security import ACCESS_TOKEN_COOKIE_NAME, decode_access_token
@@ -10,12 +12,18 @@ from sqlalchemy import select
 async def get_current_user(
     session: AsyncSession = Depends(get_db_session),
     access_token: str | None = Cookie(default=None, alias=ACCESS_TOKEN_COOKIE_NAME),
+    authorization: Annotated[str | None, Header()] = None,
 ) -> User:
-    if not access_token:
+    bearer_token: str | None = None
+    if authorization and authorization.lower().startswith("bearer "):
+        bearer_token = authorization.split(" ", 1)[1].strip()
+
+    token = bearer_token or access_token
+    if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
     try:
-        payload = decode_access_token(access_token)
+        payload = decode_access_token(token)
         user_id = int(payload["sub"])
     except (ValueError, KeyError, TypeError):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid authentication token")

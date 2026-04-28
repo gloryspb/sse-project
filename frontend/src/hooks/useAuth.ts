@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 import * as authApi from '@/api/auth';
 import { ApiError } from '@/api/client';
 import type { AuthFormValues, User } from '@/types/auth';
+import { tokenStorage } from '@/utils/token';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -17,6 +18,7 @@ export function useAuth() {
       if (!(error instanceof ApiError) || error.status !== 401) {
         toast.error(error instanceof Error ? error.message : 'Failed to load current user');
       }
+      tokenStorage.clear();
       setUser(null);
     } finally {
       setIsLoadingUser(false);
@@ -31,6 +33,7 @@ export function useAuth() {
     setIsSubmitting(true);
     try {
       const response = await authApi.register(values);
+      tokenStorage.set(response.access_token);
       setUser(response.user);
       toast.success(response.message);
       return true;
@@ -46,6 +49,7 @@ export function useAuth() {
     setIsSubmitting(true);
     try {
       const response = await authApi.login(values);
+      tokenStorage.set(response.access_token);
       setUser(response.user);
       toast.success(response.message);
       return true;
@@ -61,6 +65,7 @@ export function useAuth() {
     setIsSubmitting(true);
     try {
       const response = await authApi.logout();
+      tokenStorage.clear();
       setUser(null);
       toast.success(response.message);
     } catch (error) {
