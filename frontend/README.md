@@ -22,6 +22,22 @@ VITE_API_URL=http://localhost:8000
 npm run dev
 ```
 
+## Deploy Frontend to GitHub Pages
+
+This frontend is configured for the repository URL `https://gloryspb.github.io/sse-project/`.
+
+1. In GitHub, open `Settings -> Pages`.
+2. Set `Source` to `GitHub Actions`.
+3. In `Settings -> Secrets and variables -> Actions`, add:
+
+```env
+VITE_API_URL=https://your-backend.onrender.com
+```
+
+4. Push to `main`.
+
+The workflow at `.github/workflows/deploy-frontend.yml` will build `frontend/` and publish it to GitHub Pages.
+
 ## Backend
 
 1. Create PostgreSQL database, for example `web_toolbox`.
