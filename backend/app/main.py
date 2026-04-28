@@ -6,6 +6,7 @@ from app.api.routes.history import router as history_router
 from app.api.routes.ip import router as ip_router
 from app.api.routes.users import router as users_router
 from app.core.config import settings
+from app.db import base as model_imports  # noqa: F401
 from app.db.session import engine
 from app.models.base import Base
 
